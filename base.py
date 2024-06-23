@@ -4,6 +4,9 @@ from pinecone import Pinecone, ServerlessSpec
 import streamlit as st
 from key import p_key, HF_AUTH_TOKEN
 
+p_key="f4f4c97b-9223-4c4f-8b41-91b89d94dd39"
+HF_AUTH_TOKEN="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"
+
 pc = Pinecone(api_key=p_key)
 
 from transformers import set_seed
