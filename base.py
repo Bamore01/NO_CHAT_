@@ -10,7 +10,7 @@ index_name = "llama-rag-clean"
 
 HF_AUTH_TOKEN="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"
 
-pc = Pinecone(api_key=pc)
+
 
 from transformers import set_seed
 
