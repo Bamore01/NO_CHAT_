@@ -3,7 +3,7 @@ import pinecone
 from pinecone import Pinecone, ServerlessSpec
 import streamlit as st
 from key import p_key, HF_AUTH_TOKEN
-HF_AUTH_TOKEN=st.secrets["HF_AUTH_TOKEN"]
+
 pc = Pinecone(api_key=p_key)
 
 from transformers import set_seed
