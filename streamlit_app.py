@@ -1,38 +1,31 @@
 import streamlit as st
-from hugchat import hugchat
-from hugchat.login import Login
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error, r2_score
+import altair as alt
+import time
+import zipfile
+
 from base import retrieval
-from key import hf_email, hf_pass
 
-@st.cache_resource
-def cached_retrieval(answer):
-    return retrieval(answer)
-# App title
+# Page title
+st.set_page_config(page_title='Retrieval Augmentation Generation', page_icon='🤖')
+st.title('🤖 Retrieval Augmentation Generation')
 
-st.set_page_config(page_title="🤗💬 HugChat")
-# Store LLM generated responses
-if "messages" not in st.session_state.keys():
-    st.session_state.messages = [{"role": "assistant", "content": "¿Cuál es tu pregunta?"}]
+with st.form('Generation Form'):
+    answer = st.text_input(label='Introduce tu pregunta:', placeholder='Por favor, introduce una pregunta')
+    submitted = st.form_submit_button('Preguntar')
 
-# Display chat messages
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.write(message["content"])
-
-
-# User-provided prompt
-if prompt := st.chat_input(disabled=not (hf_email and hf_pass)):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.write(prompt)
-
-# Generate a new response if last message is not from assistant
-if st.session_state.messages[-1]["role"] != "assistant":
-    with st.chat_message("assistant"):
-        with st.spinner("Generando respuesta..."):
-            answer = str(prompt)
-            answer = f'"{answer}"'
-            response = cached_retrieval(answer) 
-            st.write(response) 
-    message = {"role": "assistant", "content": response}
-    st.session_state.messages.append(message)
+    if submitted:
+        if answer:
+            with st.spinner(f"Generando respuestas..."):
+                answer = str(answer)
+                answer = f'"{answer}"'
+                st.write(answer)
+                output = retrieval(answer)
+            st.write('Generated Question(s):')
+            st.text_area("Response", value=output)
+    else:
+        st.error('Please, provide a context to generate questions from')
